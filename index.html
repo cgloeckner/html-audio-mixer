@@ -1,0 +1,169 @@
+<!--
+https://github.com/cgloeckner/html-audio-mixer
+
+Copyright (c) Christian Glöckner
+License: MIT (see LICENSE for details)
+//-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"></script>
+    <script>
+<!--
+var upload_prefix = null
+
+function play(prefix) {
+    let src = $('#' + prefix + '_list :selected').val()
+    let player = $('#' + prefix + '_player')[0]
+    if (src != '') {
+        player.src = src
+        player.play()
+    } else {
+        player.pause()
+    }
+}
+
+function setVolume(prefix, volume) {
+    let player = $('#' + prefix + '_player')[0]
+
+    player.volume = volume / 100.0
+}
+
+function mix() {
+    let vol = parseInt($('#balance').val())
+    
+    setVolume('ambience', 100-vol)
+    setVolume('tone', vol)
+}
+
+function showTrack(prefix, tag, title) {
+    let target = $('#' + prefix + '_list')[0]
+
+    var item = new Option()
+    item.value = tag
+    item.innerHTML = title
+    target.appendChild(item)
+}
+
+function add(prefix) {
+    let source = $('#upload')[0]
+    upload_prefix = prefix
+    source.click()
+}
+
+function startUpload() {   
+    let source = $('#upload')
+    
+    // iterate all selected files
+    $.each(source[0].files, function(index, obj) {
+        let url = (window.URL || window.webkitURL).createObjectURL(obj)
+        
+        showTrack(upload_prefix, url, obj.name)
+    })
+    
+    upload_prefix = null
+    source.val("")
+}
+
+//-->
+    </script>  
+    <style>
+html, select, option {
+    background-color: rgb(50, 50, 50);
+}
+
+h1, h2, option {
+    color: white;
+}
+
+div.split {
+}
+
+div#ambience,
+div#mixer,
+div#tone {    
+    width: 30%;
+    float: left;
+}
+
+div#mixer input {
+    width: 90%;
+    margin: 5%;
+}
+
+select {
+    width: 90%;
+    margin-left: 10px;
+}
+
+input#balance {
+}
+
+input[type="button"] {
+    width: 90%;
+    margin-left: 4%;
+}
+
+div.invisible {
+    display: none;
+}
+    </style>
+    <title>HTML AudioMixer</title>
+</head>
+
+<body>
+<div class="split">
+    <h1>2-Channel HTML Audio Mixer</h1>
+    
+    <div id="ambience">
+        <!-- Ambience Player UI -->
+        <h2>Ambience</h2>
+        
+        <input type="button" value="add" onClick="add('ambience')" />
+        
+        <select id="ambience_list" size="10" onChange="play('ambience');">
+            <option value="" selected="selected">---</option>
+        </select>
+        
+        <input type="button" value="clear" onClick="clear('ambience')" />
+
+        <audio id="ambience_player" loop></audio>
+    </div>
+    
+    <div id="mixer">   
+        <!-- Player Balance UI -->
+        <h2>Balance</h2>
+        <input id="balance" type="range" min="0" max="100" step="1" value="50" onInput="mix()" />
+    </div>
+    
+    <div id="tone">
+        <!-- Tone Player UI -->
+        <h2>Tone</h2>
+                 
+        <input type="button" value="add" onClick="add('tone')" />
+        
+        <select id="tone_list" size="10" onChange="play('tone');">            
+            <option value="" selected="selected">---</option>
+        </select>
+        
+        <input type="button" value="clear" onClick="clear('tone')" />
+        
+        <audio id="tone_player">
+            <source src="" type="audio/mpeg">
+        </audio>
+    </div>
+</div>
+
+<!-- hidden upload form -->
+<div class="invisible">
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" id="upload" name="file[]" accept="audio/*" multiple onChange="startUpload()">
+    </form>
+</div>
+
+</body>
+
+</html>
