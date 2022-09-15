@@ -39,12 +39,15 @@ function mix() {
     setVolume('tone', vol)
 }
 
-function showTrack(prefix, tag, title) {
+function showTrack(prefix, tag, title, selected=false) {
     let target = $('#' + prefix + '_list')[0]
 
     var item = new Option()
     item.value = tag
     item.innerHTML = title
+    if (selected) {
+        item.setAttribute('selected', 'selected')
+    }
     target.appendChild(item)
 }
 
@@ -68,6 +71,17 @@ function startUpload() {
     source.val("")
 }
 
+function clearAll(prefix) {
+    let q = 'Really clear all ' + prefix + 's?'
+    
+    if (confirm(q)) {
+        let target = $('#' + prefix + '_list')
+        target.empty()
+        showTrack(prefix, '', '---', true)
+        
+        play(prefix)
+    }
+}
 //-->
     </script>  
     <style>
@@ -128,7 +142,7 @@ div.invisible {
             <option value="" selected="selected">---</option>
         </select>
         
-        <input type="button" value="clear" onClick="clear('ambience')" />
+        <input type="button" value="clear all" onClick="clearAll('ambience')" />
 
         <audio id="ambience_player" loop></audio>
     </div>
@@ -149,7 +163,7 @@ div.invisible {
             <option value="" selected="selected">---</option>
         </select>
         
-        <input type="button" value="clear" onClick="clear('tone')" />
+        <input type="button" value="clear all" onClick="clearAll('tone')" />
         
         <audio id="tone_player">
             <source src="" type="audio/mpeg">
