@@ -12,56 +12,44 @@ License: MIT (see LICENSE for details)
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"></script>
     <script src="mixer.js"></script> 
-    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/vladocar/CSS-Mini-Reset/master/CSS-Mini-Reset.css"> 
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/latest/normalize.css"> 
     <link rel="stylesheet" type="text/css" href="layout.css"> 
     <title>HTML AudioMixer</title>
 </head>
 
-<body>
+<body onLoad="init()">
 <div class="split">
     <h1>2-Channel HTML Audio Mixer</h1>
-    
-    <div id="ambience">
-        <!-- Ambience Player UI -->
-        <h2>Ambience</h2>
-        
-        <input type="button" value="add" onClick="add('ambience')" />
-        
-        <select id="ambience_list" size="10" onChange="play('ambience');">
-            <option value="" selected="selected">---</option>
-        </select>
-        
-        <input type="button" value="clear all" onClick="clearAll('ambience')" />
 
-        <audio id="ambience_player" loop></audio>
+    <div class="left">
+        <h2>A</h2>
+        <div id="label0">&lt;PAUSE&gt;</div>
+        <br />
+        <audio id="channel0" loop></audio>
+        <input type="button" value="&#9654;" title="PLAY" onClick="play(0)" />
+        <input type="button" value="&#9209;" title="STOP" onClick="stop(0)" />
     </div>
     
-    <div id="mixer">   
-        <!-- Player Balance UI -->
-        <h2>Balance</h2>
+    <div class="center"> 
         <input id="balance" type="range" min="0" max="100" step="1" value="50" onInput="mix()" />
+        <select id="tracks" size="8" onDblClick="play(next_id)"></select>
+        <input type="button" value="&#128194;" title="UPLOAD" onClick="browse()" />
+        <input type="button" value="&#10060;" title="DELETE" onClick="remove()" />
     </div>
     
-    <div id="tone">
-        <!-- Tone Player UI -->
-        <h2>Tone</h2>
-                 
-        <input type="button" value="add" onClick="add('tone')" />
-        
-        <select id="tone_list" size="10" onChange="play('tone');">            
-            <option value="" selected="selected">---</option>
-        </select>
-        
-        <input type="button" value="clear all" onClick="clearAll('tone')" />
-        
-        <audio id="tone_player" loop></audio>
+    <div class="right">
+        <h2>B</h2> 
+        <div id="label1">&lt;PAUSE&gt;</div>
+        <br />
+        <audio id="channel1" loop></audio> 
+        <input type="button" value="&#9654;" title="PLAY" onClick="play(1)" />
+        <input type="button" value="&#9209;" title="STOP" onClick="stop(1)" />
     </div>
 </div>
 
-<!-- hidden upload form -->
 <div class="invisible">
     <form method="post" enctype="multipart/form-data">
-        <input type="file" id="upload" name="file[]" accept="audio/*" multiple onChange="startUpload()">
+        <input type="file" id="files" name="file[]" accept="audio/*" multiple onChange="upload()">
     </form>
 </div>
 

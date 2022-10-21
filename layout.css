@@ -2,11 +2,23 @@ html, select, option {
     background-color: rgb(50, 50, 50);
 }
 
-h1, h2, option {
+div, h1, h2, option {
     color: white;
 }
 
 div.split {
+}
+
+h1, select {
+    text-align: center;
+}
+
+div.split > div.left,
+div.split > div.center,
+div.split > div.right {
+    width: 30%;
+    float: left;
+    text-align: center;
 }
 
 div#ambience,
@@ -29,10 +41,6 @@ select {
 input#balance {
 }
 
-input[type="button"] {
-    width: 90%;
-    margin-left: 4%;
-}
 
 div.invisible {
     display: none;
