@@ -17,42 +17,17 @@ License: MIT (see LICENSE for details)
     <title>HTML AudioMixer</title>
 </head>
 
-<body onLoad="init()">
-<div class="split">
-    <h1>2-Channel HTML Audio Mixer</h1>
+<body>
+    <h1>Tabletop Music Mixer <input type="button" value="+" onClick="onBrowse()" /></h1>
 
-    <div class="left">
-        <h2>A</h2>
-        <div id="label0">&lt;PAUSE&gt;</div>
-        <br />
-        <audio id="channel0" loop></audio>
-        <input type="button" value="&#9654;" title="PLAY" onClick="play(0)" />
-        <input type="button" value="&#9209;" title="STOP" onClick="stop(0)" />
+    <div id="mixer">
     </div>
-    
-    <div class="center"> 
-        <input id="balance" type="range" min="0" max="100" step="1" value="50" onInput="mix()" />
-        <select id="tracks" size="8" onDblClick="play(next_id)"></select>
-        <br />
-        <input type="button" value="&#128194;" title="UPLOAD" onClick="browse()" />
-        <input type="button" value="&#10060;" title="DELETE" onClick="remove()" />
-    </div>
-    
-    <div class="right">
-        <h2>B</h2> 
-        <div id="label1">&lt;PAUSE&gt;</div>
-        <br />
-        <audio id="channel1" loop></audio> 
-        <input type="button" value="&#9654;" title="PLAY" onClick="play(1)" />
-        <input type="button" value="&#9209;" title="STOP" onClick="stop(1)" />
-    </div>
-</div>
 
-<div class="invisible">
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" id="files" name="file[]" accept="audio/*" multiple onChange="upload()">
-    </form>
-</div>
+    <div class="invisible">
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" id="files" name="file[]" accept="audio/*" multiple onChange="onUpload()">
+        </form>
+    </div>
 
 </body>
 

@@ -7,73 +7,24 @@ License: MIT (see LICENSE for details)
 
 var next_id = 0
 
-/// Start playback on given channel
-play = (id) => {
-    let label = $(`#label${id}`)
-    let channel = $(`#channel${id}`)
-    let option = $('#tracks :selected')
-
-    if (option.val() != null) {
-        label[0].innerHTML = option.text()
-        channel[0].src = option.val()
-        channel[0].play()
-        next_id = (id + 1) % 2
-        
-    } else {
-        label[0].innerHTML = '&lt;PAUSE&gt;'
-        channel[0].src = null
-        channel[0].pause()
-        next_id = id
-    }
-     
+function onBrowse() {
+    $('#files').click()
 }
 
-/// Stop playback on given channel
-stop = (id) => {
-    let label = $(`#label${id}`)
-    let channel = $(`#channel${id}`)
-    
-    label[0].innerHTML = '&lt;PAUSE&gt;'
-    channel[0].src = null
-    
-    next_id = id
-}
-
-/// Set volume mix for both channels at once
-mix = () => {
-    let volume = parseInt($('#balance').val())
-    let channel0 = $('#channel0')
-    let channel1 = $('#channel1')
-
-    channel0[0].volume = (100 - volume) / 100.0
-    channel1[0].volume = volume / 100.0
-}
-
-/// Browse for files
-browse = () => {
-    let source = $('#files')
-    source[0].click()
-}
-
-async function load(file) {
-    let base64 = await new Promise((resolve) => {
-        let reader = new FileReader()
-        reader.onload = (e) => resolve(reader.result)
-        reader.readAsDataURL(file)
-    })
-
-    return base64
-}
-
-/// Upload selected files
-upload = () => {
+function onUpload() {
     let source = $('#files')
     let files = source[0].files
     
     $.each(source[0].files, (index, obj) => {
+        var id = next_id++
+        onAdd(id)
+        
         const reader = new FileReader()
         reader.onload = function() {
-            add(this.result, obj.name)
+            $(`#label${id}`)[0].innerHTML = obj.name
+            var channel = $(`#channel${id}`)[0]
+            channel.src = this.result
+            channel.volume = 0
         }
         reader.readAsDataURL(obj)
     })
@@ -81,61 +32,72 @@ upload = () => {
     source.val("")
 }
 
-/// Add given track to tracklist
-add = (uri, title) => {
-    let tracks = $('#tracks')
-
-    // check for duplicate
-    let skip = false
-    $.each(tracks[0], (index, option) => {
-        if (option.innerHTML == title) {
-            skip = true
-            return
-        }
-    })
-    if (skip) {
-        return
+function onAdd(id) {
+    let mixer = $('#mixer')
+    let div = document.createElement('div')
+    div.id = `strip${id}`
+    div.classList = ['strip']
+    if (id % 2 == 0) {
+        div.classList.add('dark')
+    } else {
+        div.classList.add('light')
     }
+    mixer.append(div)
+    div = mixer[0].lastChild
+
+    let remove_btn = document.createElement('input')
+    remove_btn.type = 'button'
+    remove_btn.value = 'X'
+    div.append(remove_btn)
+    remove_btn = $(div.lastChild)
+
+    let label_div = document.createElement('div')
+    label_div.id = `label${id}`
+    label_div.classList = ['label']
+    div.append(label_div)
+
+    let fader = document.createElement('input')
+    fader.id = `fader${id}`
+    fader.type = 'range'
+    fader.min = 0
+    fader.max = 100
+    fader.step = 1
+    fader.value = 0
+    div.append(fader)
+    fader = $(div.lastChild)
+
+    let player = new Audio()
+    player.id = `channel${id}`
+    player.loop = true
+    player.volume = 0
+    div.append(player)
+    player = div.lastChild
+
+    let volume_div = document.createElement('div')
+    volume_div.classList = ['percent']
+    volume_div.id = `volume${id}`
+    volume_div.innerHTML = '0%'
+    div.append(volume_div)
     
-    // save to browser cache
-    // @NOTE: disabled (file size may exceed localStorage)
-    //localStorage.setItem(`title:${title}`, uri)
-
-    // add to list
-    let item = new Option()
-    item.value = uri
-    item.innerHTML = title
-    tracks[0].appendChild(item)
-}
- 
-/// Remove selected track from tracklist
-remove = () => {
-    let option = $('#tracks :selected')
-
-    // remove from browser cache
-    // @NOTE: disabled
-    //let key = `title:${option[0].innerHTML}`
-    //localStorage.removeItem(key)
-
-    // remove from list
-    option.remove()
+    remove_btn.on('click', () => { onRemove(id) })
+    fader.on('input', () => { onMix(id) })
 }
 
-/// Initialize audio mixer
-init = () => {
-    let len = localStorage.length
-    for (var i = 0; i < len; ++i) {
-        let key = localStorage.key(i)
-        if (!key.startsWith('title:')) {
-            continue
-        }
+function onRemove(id) {
+    $(`#strip${id}`).remove()
+}
 
-        // parse data
-        let title = key.split('title:')[1]
-        let uri = localStorage.getItem(key)
-
-        // @NOTE: disabled
-        //add(uri, title)
-        //console.log(`Loaded ${title}`)
+function onMix(id) {
+    let volume = $(`#fader${id}`)[0].value
+    console.log(volume)
+    $(`#volume${id}`)[0].innerHTML = `${volume}%`
+    
+    let channel = $(`#channel${id}`)[0]
+    if (channel.volume == 0) {
+        channel.play()
+    }
+    channel.volume = volume / 100.0
+    if (volume == 0) {
+        channel.pause()
     }
 }

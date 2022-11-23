@@ -6,41 +6,51 @@ div, h1, h2, option {
     color: white;
 }
 
-div.split {
+div#mixer {
 }
 
-h1, select {
+div.strip { 
+    float: left;
+    width: 40px;
+    height: 450px;
+
     text-align: center;
 }
 
-div.split > div.left,
-div.split > div.center,
-div.split > div.right {
-    width: 30%;
-    float: left;
+div.light {
+    background-color: rgba(75, 75, 75);
+}
+
+div.dark {
+    background-color: rgba(50, 50, 50);
+}
+
+div.label {
+    width: 200px;
+    height: 25px;
+    white-space: nowrap;
+    
+    transform: rotate(-90deg);
+    
+    position: relative;
+    top: 92px;
+    left: -80px;
+}
+
+div.percent {
     text-align: center;
+    
+    position: relative;
+    top: 355px;
 }
 
-div#ambience,
-div#mixer,
-div#tone {    
-    width: 30%;
-    float: left;
+div.strip > input[type="range"] {
+    transform: rotate(-90deg);
+    
+    position: relative;
+    left: -75px;
+    top: 270px;
 }
-
-div#mixer input {
-    width: 90%;
-    margin: 5%;
-}
-
-select {
-    width: 90%;
-    margin-left: 10px;
-}
-
-input#balance {
-}
-
 
 div.invisible {
     display: none;
