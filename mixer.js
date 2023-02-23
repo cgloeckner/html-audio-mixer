@@ -99,5 +99,6 @@ function onMix(id) {
     channel.volume = volume / 100.0
     if (volume == 0) {
         channel.pause()
+        channel.currentTime = 0
     }
 }
