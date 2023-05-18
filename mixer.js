@@ -47,6 +47,7 @@ function onAdd(id) {
 
     let remove_btn = document.createElement('input')
     remove_btn.type = 'button'
+    remove_btn.classList.add('delete')
     remove_btn.value = 'X'
     div.append(remove_btn)
     remove_btn = $(div.lastChild)

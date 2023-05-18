@@ -9,11 +9,7 @@ div, h1, h2, option {
 div#mixer {
 }
 
-div.strip { 
-    float: left;
-    width: 40px;
-    height: 410px;
-
+div.strip {
     text-align: center;
 }
 
@@ -25,31 +21,20 @@ div.dark {
     background-color: rgba(50, 50, 50);
 }
 
+input.delete {
+    float: right;
+}
+
 div.label {
-    width: 100px;
-    height: 25px;
-    white-space: nowrap;
-    
-    transform: rotate(-90deg);
-    
-    position: relative;
-    top: 92px;
-    left: -30px;
+    float: left;
 }
 
 div.percent {
     text-align: center;
-    
-    position: relative;
-    top: 315px;
 }
 
 div.strip > input[type="range"] {
-    transform: rotate(-90deg);
-    
-    position: relative;
-    left: -75px;
-    top: 230px;
+    width: 66%;
 }
 
 div.invisible {
